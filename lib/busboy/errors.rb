@@ -8,7 +8,7 @@ module Busboy
     end
 
     def to_s
-      "IO error creating databag at #{filepath}"
+      "IO error creating databag at #{@filepath}"
     end
   end
 end

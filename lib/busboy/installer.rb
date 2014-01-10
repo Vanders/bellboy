@@ -27,11 +27,12 @@ module Busboy
         Busboy.logger.log "Downloading databags for #{source.cached_cookbook.name}"
 
         path = source.cached_cookbook.path
+        containerpath = File.join(path, 'data_bags')
 
         begin
-          Dir.mkdir(File.join(path, 'data_bags'))
+          Dir.mkdir(containerpath) unless Dir.exists?(containerpath)
         rescue SystemCallError => ex
-          throw Busboy::DatabagWriteError(path), ex
+          raise Busboy::DatabagWriteError.new(containerpath), ex
         end
 
         begin
@@ -45,8 +46,8 @@ module Busboy
             response = Faraday.get(location)
             if response.success?
               begin
-                databagpath = File.join(path, 'data_bags', databag)
-                Dir.mkdir(databagpath)
+                databagpath = File.join(containerpath, databag)
+                Dir.mkdir(databagpath) unless Dir.exists?(databagpath)
 
                 itempath = File.join(databagpath, "#{item}.json")
                 Busboy.logger.debug "Creating data bag item "#{itempath}"
@@ -54,8 +55,8 @@ module Busboy
                 item = File.open(itempath, 'w')
                 item.write(response.body)
                 item.close
-              rescue IOError => ex
-                raise Busboy::DatabagWriteError(databagpath), ex
+              rescue SystemCallError, IOError => ex
+                raise Busboy::DatabagWriteError.new(databagpath), ex
               end
             else
               Busboy.logger.log "Failed to download #{location}"
