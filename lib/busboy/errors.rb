@@ -20,5 +20,8 @@ module Busboy
     end
   end
 
+  class ChefConnectionError < BusboyError
+  end
+
 end
 

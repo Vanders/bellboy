@@ -14,6 +14,11 @@ module Busboy
       type: :boolean,
       desc: 'Enable verbose output',
       aliases: '-v'
+    class_option :config,
+      type: :string,
+      desc: 'Path to Berkshelf configuration to use.',
+      aliases: '-c',
+      banner: 'PATH'
 
     desc "version", "Version all databag templates"
     method_option :berksfile,
@@ -54,6 +59,12 @@ module Busboy
       default: Berkshelf::DEFAULT_FILENAME,
       desc: 'Path to a Berksfile to operate off of.',
       aliases: '-b',
+      banner: 'PATH'
+    method_option :busboyfile,
+      type: :string,
+      default: Busboy::DEFAULT_FILENAME,
+      desc: 'Path to a Busboy file to operate off of.',
+      aliases: '-d',
       banner: 'PATH'
     def upload
       berksfile = Busboy::berks_from_file(options[:berksfile])
