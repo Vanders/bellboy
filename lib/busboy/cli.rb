@@ -1,0 +1,50 @@
+require 'busboy'
+require 'thor'
+
+module Busboy
+  class Cli < Thor
+
+    def initialize(*args)
+      super(*args)
+
+      @options = options.dup
+
+      Busboy.logger = Busboy::Logger.new(options)
+    end
+
+    class_option :verbose,
+      type: :boolean,
+      desc: 'Enable verbose output',
+      aliases: '-v'
+
+    desc "version", "Version all databag templates"
+    def version
+      Busboy::Versioner.version
+    end
+
+    desc "install", "Install databags for all Cookbooks known by Berkshelf"
+    method_option :berksfile,
+      type: :string,
+      default: Berkshelf::DEFAULT_FILENAME,
+      desc: 'Path to a Berksfile to operate off of.',
+      aliases: '-b',
+      banner: 'PATH'
+    def install
+      berksfile = Busboy::berks_from_file(options[:berksfile])
+      Busboy::Installer.install(berksfile, options)
+    end
+
+    desc "upload", "Upload all databags for all Cookbooks known by Berkshelf"
+    method_option :berksfile,
+      type: :string,
+      default: Berkshelf::DEFAULT_FILENAME,
+      desc: 'Path to a Berksfile to operate off of.',
+      aliases: '-b',
+      banner: 'PATH'
+    def upload
+      berksfile = Busboy::berks_from_file(options[:berksfile])
+      Busboy::Uploader.upload(berksfile, options)
+    end
+
+  end
+end
