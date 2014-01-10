@@ -35,8 +35,9 @@ module Busboy
           raise Busboy::DatabagWriteError.new(containerpath), ex
         end
 
+        manifest = File.join(path, 'Busboy')
         begin
-          IO.read("#{path}/Busboy").split.each do |line|
+          File.read(manifest).split.each do |line|
 
             databag, item = line.split('/')
             location = File.join("#{site[:value]}", 'databags', databag, item)
@@ -63,8 +64,8 @@ module Busboy
               # Raise an exception?
             end
           end
-        rescue IOError => ex
-          raise Busboy::DatabagReadError, ex
+        rescue SystemCallError, IOError => ex
+          raise Busboy::DatabagReadError.new(manifest), ex
         end
 
       end
