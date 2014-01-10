@@ -61,30 +61,30 @@ module Busboy
           end
 
         end
-      end
 
-      def download_item(site, databag, item, itempath)
-        location = File.join("#{site[:value]}", 'databags', databag, item)
+        def download_item(site, databag, item, itempath)
+          location = File.join("#{site[:value]}", 'databags', databag, item)
 
-        Busboy.logger.log "Downloading data bag item #{databag}/#{item} from '#{location}'"
+          Busboy.logger.log "Downloading data bag item #{databag}/#{item} from '#{location}'"
 
-        response = Faraday.get(location)
-        if response.success?
-          begin
-            Busboy.logger.debug "Creating data bag item "#{itempath}"
+          response = Faraday.get(location)
+          if response.success?
+            begin
+              Busboy.logger.debug "Creating data bag item "#{itempath}"
 
-            item = File.open(itempath, 'w')
-            item.write(response.body)
-            item.close
-          rescue SystemCallError, IOError => ex
-            raise Busboy::DatabagWriteError.new(databagpath), ex
+              item = File.open(itempath, 'w')
+              item.write(response.body)
+              item.close
+            rescue SystemCallError, IOError => ex
+              raise Busboy::DatabagWriteError.new(databagpath), ex
+            end
+          else
+            Busboy.logger.log "Failed to download #{location}"
+            # Raise an exception?
           end
-        else
-          Busboy.logger.log "Failed to download #{location}"
-          # Raise an exception?
         end
-      end
 
+    end
   end
 end
 
