@@ -37,6 +37,12 @@ module Busboy
       desc: 'Path to a Berksfile to operate off of.',
       aliases: '-b',
       banner: 'PATH'
+    method_option :busboyfile,
+      type: :string,
+      default: Busboy::DEFAULT_FILENAME,
+      desc: 'Path to a Busboy file to operate off of.',
+      aliases: '-d',
+      banner: 'PATH'
     def install
       berksfile = Busboy::berks_from_file(options[:berksfile])
       Busboy::Installer.install(berksfile, options)

@@ -7,8 +7,9 @@ require_relative 'busboy/installer'
 require_relative 'busboy/uploader'
 
 module Busboy
-  class << self
+  DEFAULT_FILENAME = 'Busboy'
 
+  class << self
     def berks_from_file(filepath)
       Berkshelf::Berksfile.from_file(filepath)  
     end
