@@ -15,6 +15,11 @@ module Busboy
 
     attr_accessor :logger
 
+    def berks_sources(berksfile)
+      resolver          = Berkshelf.ui.mute { berksfile.resolve(berksfile.sources) }
+      #cached_cookbooks  = resolver[:solution]
+      local_sources     = resolver[:sources]
+    end
   end
 end
 

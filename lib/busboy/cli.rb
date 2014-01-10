@@ -7,8 +7,6 @@ module Busboy
     def initialize(*args)
       super(*args)
 
-      @options = options.dup
-
       Busboy.logger = Busboy::Logger.new(options)
     end
 
@@ -18,8 +16,18 @@ module Busboy
       aliases: '-v'
 
     desc "version", "Version all databag templates"
+    method_option :berksfile,
+      type: :string,
+      default: Berkshelf::DEFAULT_FILENAME,
+      desc: 'Path to a Berksfile to operate off of.',
+      aliases: '-b',
+      banner: 'PATH'
     def version
-      Busboy::Versioner.version
+      berksfile = Busboy::berks_from_file(options[:berksfile])
+
+      version_options = options.reverse_merge(verbose: false)
+
+      Busboy::Versioner.version(berksfile, version_options)
     end
 
     desc "install", "Install databags for all Cookbooks known by Berkshelf"
