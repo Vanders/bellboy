@@ -19,3 +19,8 @@ doc/
 
 # Test inputs
 Berksfile
+target.json
+
+# Build artifacts
+*.gem
+VERSION
