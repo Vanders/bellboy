@@ -14,6 +14,11 @@ module Busboy
       type: :boolean,
       desc: 'Enable verbose output',
       aliases: '-v'
+    class_option :quiet,
+      type: :boolean,
+      desc: 'Silence all informational output.',
+      aliases: '-q',
+      default: false
     class_option :config,
       type: :string,
       desc: 'Path to Berkshelf configuration to use.',

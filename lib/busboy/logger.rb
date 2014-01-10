@@ -5,7 +5,7 @@ module Busboy
 
   class Logger
     def initialize(options={})
-      @loglevel = options[:verbose] ? Busboy::LOG_LEVEL_DEBUG : Busboy::LOG_LEVEL_INFO
+      @loglevel = level(options)
     end
 
     # Output a normal informational message
@@ -18,6 +18,18 @@ module Busboy
       puts(message) unless @loglevel < Busboy::LOG_LEVEL_DEBUG
     end
     alias_method :verbose, :debug
+
+    private
+
+      def level(options)
+        if options[:quiet] 
+          Busboy::LOG_LEVEL_NONE
+        elsif options[:verbose]
+          Busboy::LOG_LEVEL_DEBUG
+        else
+          Busboy::LOG_LEVEL_INFO
+        end
+      end
 
   end
 end
