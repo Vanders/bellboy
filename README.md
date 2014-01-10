@@ -16,15 +16,15 @@ Or run it as a standalone:
 
 Usage
 -----
-Busboy is intended to be used alongside Berkshelf, allowing Berkshelf to manage the Cookbooks and their dependencies and Busboy to manage Databags & Databag Items that are associated with each Cookbook.
+Busboy is intended to be used alongside Berkshelf, allowing Berkshelf to manage the cookbooks and their dependencies and Busboy to manage Databags & Databag Items that are associated with each cookbook.
 
 Busboy can be used to version databag items (created from databag templates), upload the databags to a server, and download databags via. an API server in a similar way to Berkshelf.
 
-Busboy expects databags to be stored within the Cookbook in a directory named `data_bags`. It will search this directory for databags, and then for databag items (and databag item templates) within each databag.
+Busboy expects databags to be stored within the cookbook in a directory named `data_bags`. It will search this directory for databags, and then for databag items (and databag item templates) within each databag.
 
 ### Versioning databags
 
-Simply run Busboy from the Cookbook directory which contains the data bags:
+Simply run Busboy from the cookbook directory which contains the data bags:
 
     busboy version
 
@@ -36,23 +36,23 @@ Please see the documentation for [knife-databag-version](https://rubygems.org/ge
 
     busboy install
 
-If any Cookbooks held in the current Berkshelf cookbook cache have a `Busboy` file then Busboy will download all of the databags and databag items that are specified.
+If any cookbooks held in the current Berkshelf cookbook cache have a `Busboy` file then Busboy will download all of the databags and databag items that are specified.
 
-Databags & databag items are stored within a directory named `data_bags` within each Cookbook in the Berkshelf cache. Sebseuntly running Busboy to upload databags will upload any databags & databag items that were downloaded by Busboy.
+Databags & databag items are stored within a directory named `data_bags` within each cookbook in the Berkshelf cache. Subsequently running Busboy to upload databags will upload any databags & databag items that were downloaded by Busboy.
 
 ### Uploading databags
 
     busboy upload
 
-Busboy creates the databags on the remote server, uploads all databag items (files ending in `.json` that are found below the `data_bags` directory) and create the `Busboy` file which tells Busboy which databag items are associated with this Cookbook.
+Busboy creates the databags on the remote server, uploads all databag items (files ending in `.json` that are found below the `data_bags` directory) and create the `Busboy` file which tells Busboy which databag items are associated with this cookbook.
 
-Once you have uploaded the databags you can run `berks upload`. This ensures that Berkshelf uploads the `Busboy` file along with the Cookbook.
+Once you have uploaded the databags you can run `berks upload`. This ensures that Berkshelf uploads the `Busboy` file along with the cookbook.
 
 Examples
 --------
 ### Uploading databags
 
-Assume the following Cookbook:
+Assume the following cookbook:
 
     myface/
 	    recipes/
@@ -64,7 +64,7 @@ Assume the following Cookbook:
 		Thorfile
 		.gitignore
 
-We add our databags within the Cookbook
+We add our databags within the cookbook
 
 	myface
 		...
@@ -94,16 +94,16 @@ Now we can use Busboy to upload the databag items to the Chef server:
 	$ busboy upload
 	Uploading ./data_bags/myface/versioned_data_1_2_0.json
 
-Busboy will create the `Busboy` file for us. When we upload the Cookbook with Berkshelf, the `Busboy` file will be uploaded.
+Busboy will create the `Busboy` file for us. When we upload the cookbook with Berkshelf, the `Busboy` file will be uploaded.
 
 ### Downloading databags
 
-We download the Cookbooks in the usual way with Berkshelf:
+We download the cookbooks in the usual way with Berkshelf:
 
 	$ berks install
 	Installing myface (1.2.0) from site: 'https://example.com'
 
-Berkshelf will download the `Busboy` file as part of the Cookbook and store it in it's Cookbook cache. We can use Busboy to retrieve the databags:
+Berkshelf will download the `Busboy` file as part of the cookbook and store it in its cookbook cache. We can use Busboy to retrieve the databags:
 
 	$ busboy install
 	Downloading databags for myface-1.2.0
