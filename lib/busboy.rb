@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'berkshelf'
 require 'ridley'
 
@@ -12,14 +13,14 @@ module Busboy
 
   class << self
     def berks_from_file(filepath)
-      Berkshelf::Berksfile.from_file(filepath)  
+      Berkshelf::Berksfile.from_file(filepath)
     end
 
     attr_accessor :logger
 
     def berks_sources(berksfile)
-      resolver          = Berkshelf.ui.mute { berksfile.resolve(berksfile.sources) }
-      local_sources     = resolver[:sources]
+      resolver = Berkshelf.ui.mute { berksfile.resolve(berksfile.sources) }
+      resolver[:sources]
     end
 
     def ridley_connection(options = {})
@@ -30,20 +31,19 @@ module Busboy
       ridley_options[:ssl]         = { verify: (options[:ssl_verify] || Berkshelf::Config.instance.ssl.verify) }
 
       unless ridley_options[:server_url].present?
-        raise Berkshelf::ChefConnectionError, 'Missing required attribute in your Berkshelf configuration: chef.server_url'
+        fail Berkshelf::ChefConnectionError, 'Missing required attribute in your Berkshelf configuration: chef.server_url'
       end
 
       unless ridley_options[:client_name].present?
-        raise Berkshelf::ChefConnectionError, 'Missing required attribute in your Berkshelf configuration: chef.node_name'
+        fail Berkshelf::ChefConnectionError, 'Missing required attribute in your Berkshelf configuration: chef.node_name'
       end
 
       unless ridley_options[:client_key].present?
-        raise Berkshelf::ChefConnectionError, 'Missing required attribute in your Berkshelf configuration: chef.client_key'
+        fail Berkshelf::ChefConnectionError, 'Missing required attribute in your Berkshelf configuration: chef.client_key'
       end
 
       Ridley.new(ridley_options)
     end
-
   end
 end
 

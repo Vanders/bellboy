@@ -1,16 +1,19 @@
+# encoding: utf-8
+
 module Busboy
   LOG_LEVEL_NONE = 0
   LOG_LEVEL_INFO = 1
   LOG_LEVEL_DEBUG = 2
 
+  # Simple stdout logger
   class Logger
-    def initialize(options={})
+    def initialize(options = {})
       @loglevel = level(options)
     end
 
     # Output a normal informational message
     def log(message)
-      puts(message) unless @loglevel < Busboy::LOG_LEVEL_INFO 
+      puts(message) unless @loglevel < Busboy::LOG_LEVEL_INFO
     end
 
     # Output a debug message
@@ -21,16 +24,14 @@ module Busboy
 
     private
 
-      def level(options)
-        if options[:quiet] 
-          Busboy::LOG_LEVEL_NONE
-        elsif options[:verbose]
-          Busboy::LOG_LEVEL_DEBUG
-        else
-          Busboy::LOG_LEVEL_INFO
-        end
+    def level(options)
+      if options[:quiet]
+        Busboy::LOG_LEVEL_NONE
+      elsif options[:verbose]
+        Busboy::LOG_LEVEL_DEBUG
+      else
+        Busboy::LOG_LEVEL_INFO
       end
-
+    end
   end
 end
-

@@ -1,9 +1,10 @@
+# encoding: utf-8
 require 'busboy'
 require 'thor'
 
 module Busboy
+  # Simple CLI. Mirrors the Berkshelf options & commands where possible.
   class Cli < Thor
-
     def initialize(*args)
       super(*args)
 
@@ -25,7 +26,7 @@ module Busboy
       aliases: '-c',
       banner: 'PATH'
 
-    desc "version", "Version all databag templates"
+    desc 'version', 'Version all databag templates'
     method_option :berksfile,
       type: :string,
       default: Berkshelf::DEFAULT_FILENAME,
@@ -33,14 +34,14 @@ module Busboy
       aliases: '-b',
       banner: 'PATH'
     def version
-      berksfile = Busboy::berks_from_file(options[:berksfile])
+      berksfile = Busboy.berks_from_file(options[:berksfile])
 
       version_options = options.reverse_merge(verbose: false)
 
       Busboy::Versioner.version(berksfile, version_options)
     end
 
-    desc "install", "Install databags for all Cookbooks known by Berkshelf"
+    desc 'install', 'Install databags for all Cookbooks known by Berkshelf'
     method_option :berksfile,
       type: :string,
       default: Berkshelf::DEFAULT_FILENAME,
@@ -54,11 +55,11 @@ module Busboy
       aliases: '-d',
       banner: 'PATH'
     def install
-      berksfile = Busboy::berks_from_file(options[:berksfile])
+      berksfile = Busboy.berks_from_file(options[:berksfile])
       Busboy::Installer.install(berksfile, options)
     end
 
-    desc "upload", "Upload all databags for all Cookbooks known by Berkshelf"
+    desc 'upload', 'Upload all databags for all Cookbooks known by Berkshelf'
     method_option :berksfile,
       type: :string,
       default: Berkshelf::DEFAULT_FILENAME,
@@ -72,9 +73,8 @@ module Busboy
       aliases: '-d',
       banner: 'PATH'
     def upload
-      berksfile = Busboy::berks_from_file(options[:berksfile])
+      berksfile = Busboy.berks_from_file(options[:berksfile])
       Busboy::Uploader.upload(berksfile, options)
     end
-
   end
 end
