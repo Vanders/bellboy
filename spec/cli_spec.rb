@@ -2,6 +2,7 @@
 $LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
 require 'busboy'
+require_relative 'spec-helpers'
 
 describe 'cli' do
   it 'should output help information if run with no arguments' do
@@ -39,5 +40,10 @@ describe 'cli' do
 
   it 'should not fail to run the \'upload\' command with an empty Berksfile' do
     Busboy::Cli.start(%w[upload -b /dev/null])
+  end
+
+  it 'should fail to run with an invalid Berksfile' do
+    content = capture(:stdout) { lambda{ Busboy::Cli.start(%w[version -b /i/dont/exist]) }.should exit_with_code(0) }
+    expect(content).to match(/could not be found/)
   end
 end

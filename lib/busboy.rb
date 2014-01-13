@@ -13,7 +13,12 @@ module Busboy
 
   class << self
     def berks_from_file(filepath)
-      Berkshelf::Berksfile.from_file(filepath)
+      begin
+        Berkshelf::Berksfile.from_file(filepath)
+      rescue Berkshelf::BerksfileNotFound
+        Busboy.logger.log "Berkfile #{filepath} could not be found."
+        exit
+      end
     end
 
     attr_accessor :logger
