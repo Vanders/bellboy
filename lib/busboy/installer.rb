@@ -80,7 +80,7 @@ module Busboy
           end
         else
           Busboy.logger.log "Failed to download #{location}"
-          # Raise an exception?
+          fail Busboy::APIError, location
         end
       end
     end

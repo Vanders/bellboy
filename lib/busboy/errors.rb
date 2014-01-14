@@ -30,4 +30,11 @@ module Busboy
   # An error occured during a Chef API call
   class ChefConnectionError < BusboyError
   end
+
+  # An error occured during a Busboy API call
+  class APIError < BusboyIOError
+    def to_s
+      "API call failed for #{@filepath}"
+    end
+  end
 end

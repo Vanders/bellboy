@@ -13,7 +13,7 @@ module Busboy
 
     class_option :verbose,
       type: :boolean,
-      desc: 'Enable verbose output',
+      desc: 'Enable verbose output.',
       aliases: '-v'
     class_option :quiet,
       type: :boolean,
