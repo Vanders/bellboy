@@ -27,14 +27,21 @@ module Busboy
     end
   end
 
+  # Base for all API errors
+  class BusboyAPIError < BusboyError
+    def initialize(location)
+      @location = location
+    end
+  end
+
   # An error occured during a Chef API call
-  class ChefConnectionError < BusboyError
+  class ChefConnectionError < BusboyAPIError
   end
 
   # An error occured during a Busboy API call
-  class APIError < BusboyIOError
+  class DatabagAPIError < BusboyAPIError
     def to_s
-      "API call failed for #{@filepath}"
+      "Databag API call failed for #{@location}"
     end
   end
 end

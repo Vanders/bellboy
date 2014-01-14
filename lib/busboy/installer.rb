@@ -80,7 +80,7 @@ module Busboy
           end
         else
           Busboy.logger.log "Failed to download #{location}"
-          fail Busboy::APIError, location
+          fail Busboy::DatabagAPIError, location
         end
       end
     end
