@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 Gem::Specification.new do |g|
-  g.name                    = 'busboy'
+  g.name                    = 'bellboy'
   g.version                 = IO.read(File.join(File.dirname(__FILE__), "VERSION")) rescue "0.0.1"
   g.summary                 = "Manage data bags with Berkshelf"
   g.description             = "Version, install & upload data bag items that are stored alongside your Berkshelf Cookbooks"

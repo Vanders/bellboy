@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 $LOAD_PATH.push File.expand_path('../../lib', __FILE__)
-require 'busboy'
+require 'bellboy'
 
 begin
-  Busboy::Cli.start
-rescue Busboy::BusboyError => e
+  Bellboy::Cli.start
+rescue Bellboy::BellboyError => e
   puts e
 end

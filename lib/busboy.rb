@@ -2,21 +2,21 @@
 require 'berkshelf'
 require 'ridley'
 
-require_relative 'busboy/errors'
-require_relative 'busboy/logger'
-require_relative 'busboy/versioner'
-require_relative 'busboy/installer'
-require_relative 'busboy/uploader'
+require_relative 'bellboy/errors'
+require_relative 'bellboy/logger'
+require_relative 'bellboy/versioner'
+require_relative 'bellboy/installer'
+require_relative 'bellboy/uploader'
 
-module Busboy
-  DEFAULT_FILENAME = 'Busboy'
+module Bellboy
+  DEFAULT_FILENAME = 'Bellboy'
 
   class << self
     def berks_from_file(filepath)
       begin
         Berkshelf::Berksfile.from_file(filepath)
       rescue Berkshelf::BerksfileNotFound
-        Busboy.logger.log "Berkfile #{filepath} could not be found."
+        Bellboy.logger.log "Berkfile #{filepath} could not be found."
         exit
       end
     end
@@ -52,4 +52,4 @@ module Busboy
   end
 end
 
-require_relative 'busboy/cli'
+require_relative 'bellboy/cli'

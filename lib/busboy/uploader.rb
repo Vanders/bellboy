@@ -1,19 +1,19 @@
 # encoding: utf-8
-require 'busboy'
+require 'bellboy'
 require 'JSON'
 
-module Busboy
+module Bellboy
   # Push data bags & data bag items to the Chef server
   class Uploader
     class << self
       def upload(berksfile, options = {})
-        @busboyfile = options[:busboyfile]
+        @bellboyfile = options[:busboyfile]
 
-        local_sources = Busboy.berks_sources(berksfile)
-        conn = Busboy.ridley_connection(options)
+        local_sources = Bellboy.berks_sources(berksfile)
+        conn = Bellboy.ridley_connection(options)
  
         local_sources.each do |source|
-          Busboy.logger.debug "Source: #{source.cached_cookbook.path}"
+          Bellboy.logger.debug "Source: #{source.cached_cookbook.path}"
 
           upload_databags(source.cached_cookbook, conn)
         end
@@ -22,7 +22,7 @@ module Busboy
       private
 
       def upload_databags(cookbook, conn)
-        Busboy.logger.verbose "Uploading data bags for #{cookbook.name}"
+        Bellboy.logger.verbose "Uploading data bags for #{cookbook.name}"
 
         path = File.join(cookbook.path, 'data_bags')
         Dir.foreach(path) do |dir|
@@ -53,7 +53,7 @@ module Busboy
           # Upload all of the JSON files
           if file.match('.json')
             begin
-              Busboy.logger.log("Uploading #{File.join(path, file)}")
+              Bellboy.logger.log("Uploading #{File.join(path, file)}")
 
               itempath = File.join(path, file)
               begin
@@ -79,7 +79,7 @@ module Busboy
 
       def create_manifest_file(path, data_bag, manifest)
         begin
-          manifestfile = File.open(File.join(path, @busboyfile), 'w')
+          manifestfile = File.open(File.join(path, @bellboyfile), 'w')
 
           manifest.each do |item|
             manifestfile.write("#{data_bag}/#{item}\n")
