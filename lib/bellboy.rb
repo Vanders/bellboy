@@ -18,11 +18,11 @@
 require 'berkshelf'
 require 'ridley'
 
-require_relative 'bellboy/errors'
-require_relative 'bellboy/logger'
-require_relative 'bellboy/versioner'
-require_relative 'bellboy/installer'
-require_relative 'bellboy/uploader'
+require 'bellboy/errors'
+require 'bellboy/logger'
+require 'bellboy/versioner'
+require 'bellboy/installer'
+require 'bellboy/uploader'
 
 module Bellboy
   DEFAULT_FILENAME = 'Bellboy'
