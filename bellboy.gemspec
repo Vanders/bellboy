@@ -16,4 +16,5 @@ Gem::Specification.new do |g|
   g.add_runtime_dependency 'thor',      '~> 0.18.0'
   g.add_runtime_dependency 'berkshelf', '~> 2.0.10'
   g.add_runtime_dependency 'faraday',   '~> 0.8.0'
+  g.add_runtime_dependency 'ridley',    '~> 1.5.0'
 end
