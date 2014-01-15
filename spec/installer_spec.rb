@@ -1,14 +1,14 @@
 # encoding: utf-8
 $LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
-require 'busboy'
+require 'bellboy'
 
 describe 'installer' do
   before (:each) do
-    @berksfile = Busboy.berks_from_file('/dev/null')
+    @berksfile = Bellboy.berks_from_file('/dev/null')
   end
 
   it 'should not throw any exceptions' do
-    Busboy::Installer.install(@berksfile)
+    Bellboy::Installer.install(@berksfile)
   end
 end

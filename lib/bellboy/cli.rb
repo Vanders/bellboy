@@ -1,14 +1,14 @@
 # encoding: utf-8
-require 'busboy'
+require 'bellboy'
 require 'thor'
 
-module Busboy
+module Bellboy
   # Simple CLI. Mirrors the Berkshelf options & commands where possible.
   class Cli < Thor
     def initialize(*args)
       super(*args)
 
-      Busboy.logger = Busboy::Logger.new(options)
+      Bellboy.logger = Bellboy::Logger.new(options)
     end
 
     class_option :verbose,
@@ -34,11 +34,11 @@ module Busboy
       aliases: '-b',
       banner: 'PATH'
     def version
-      berksfile = Busboy.berks_from_file(options[:berksfile])
+      berksfile = Bellboy.berks_from_file(options[:berksfile])
 
       version_options = options.reverse_merge(verbose: false)
 
-      Busboy::Versioner.version(berksfile, version_options)
+      Bellboy::Versioner.version(berksfile, version_options)
     end
 
     desc 'install', 'Install databags for all Cookbooks known by Berkshelf'
@@ -48,15 +48,15 @@ module Busboy
       desc: 'Path to a Berksfile to operate off of.',
       aliases: '-b',
       banner: 'PATH'
-    method_option :busboyfile,
+    method_option :bellboyfile,
       type: :string,
-      default: Busboy::DEFAULT_FILENAME,
-      desc: 'Path to a Busboy file to operate off of.',
+      default: Bellboy::DEFAULT_FILENAME,
+      desc: 'Path to a Bellboy file to operate off of.',
       aliases: '-d',
       banner: 'PATH'
     def install
-      berksfile = Busboy.berks_from_file(options[:berksfile])
-      Busboy::Installer.install(berksfile, options)
+      berksfile = Bellboy.berks_from_file(options[:berksfile])
+      Bellboy::Installer.install(berksfile, options)
     end
 
     desc 'upload', 'Upload all databags for all Cookbooks known by Berkshelf'
@@ -66,15 +66,15 @@ module Busboy
       desc: 'Path to a Berksfile to operate off of.',
       aliases: '-b',
       banner: 'PATH'
-    method_option :busboyfile,
+    method_option :bellboyfile,
       type: :string,
-      default: Busboy::DEFAULT_FILENAME,
-      desc: 'Path to a Busboy file to operate off of.',
+      default: Bellboy::DEFAULT_FILENAME,
+      desc: 'Path to a Bellboy file to operate off of.',
       aliases: '-d',
       banner: 'PATH'
     def upload
-      berksfile = Busboy.berks_from_file(options[:berksfile])
-      Busboy::Uploader.upload(berksfile, options)
+      berksfile = Bellboy.berks_from_file(options[:berksfile])
+      Bellboy::Uploader.upload(berksfile, options)
     end
   end
 end

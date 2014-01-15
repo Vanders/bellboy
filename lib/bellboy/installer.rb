@@ -1,21 +1,21 @@
 # encoding: utf-8
-require 'busboy'
+require 'bellboy'
 require 'faraday'
 
-module Busboy
+module Bellboy
   # Downloads data bags from the remote API for any Cookbook that contains a
-  # Busboy manifest.
+  # Bellboy manifest.
   class Installer
     class << self
       def install(berksfile, options = {})
-        @busboyfile = options[:busboyfile]
+        @bellboyfile = options[:busboyfile]
 
-        local_sources = Busboy.berks_sources(berksfile)
+        local_sources = Bellboy.berks_sources(berksfile)
 
         local_sources.each do |source|
-          Busboy.logger.debug "Source: #{source.cached_cookbook.path}"
+          Bellboy.logger.debug "Source: #{source.cached_cookbook.path}"
 
-          if File.exists?(File.join(source.cached_cookbook.path, @busboyfile))
+          if File.exists?(File.join(source.cached_cookbook.path, @bellboyfile))
             site = berksfile.locations.select { |loc| loc[:type] == :site }.first
 
             fail Berkshelf::InvalidChefAPILocation if site.nil?
@@ -29,7 +29,7 @@ module Busboy
       private
 
       def download_databags(source, site)
-        Busboy.logger.log "Downloading databags for #{source.cached_cookbook.name}"
+        Bellboy.logger.log "Downloading databags for #{source.cached_cookbook.name}"
 
         path = source.cached_cookbook.path
         containerpath = File.join(path, 'data_bags')
@@ -37,10 +37,10 @@ module Busboy
         begin
           Dir.mkdir(containerpath) unless Dir.exists?(containerpath)
         rescue SystemCallError => ex
-          raise Busboy::DatabagWriteError.new(containerpath), ex
+          raise Bellboy::DatabagWriteError.new(containerpath), ex
         end
 
-        manifest = File.join(path, @busboyfile)
+        manifest = File.join(path, @bellboyfile)
         begin
           File.read(manifest).split.each do |line|
             databag, item = line.split('/')
@@ -50,7 +50,7 @@ module Busboy
 
             itempath = File.join(databagpath, "#{item}.json")
             if File.exists?(itempath)
-              Busboy.logger.verbose "Skipping download of #{itempath} as it already exists"
+              Bellboy.logger.verbose "Skipping download of #{itempath} as it already exists"
             else
               download_item(site, databag, item, itempath)
             end
@@ -58,29 +58,29 @@ module Busboy
           end
 
         rescue SystemCallError, IOError => ex
-          raise Busboy::DatabagReadError.new(manifest), ex
+          raise Bellboy::DatabagReadError.new(manifest), ex
         end
       end
 
       def download_item(site, databag, item, itempath)
         location = File.join("#{site[:value]}", 'databags', databag, item)
 
-        Busboy.logger.log "Downloading data bag item #{databag}/#{item} from '#{location}'"
+        Bellboy.logger.log "Downloading data bag item #{databag}/#{item} from '#{location}'"
 
         response = Faraday.get(location)
         if response.success?
           begin
-            Busboy.logger.debug "Creating data bag item #{itempath}"
+            Bellboy.logger.debug "Creating data bag item #{itempath}"
 
             item = File.open(itempath, 'w')
             item.write(response.body)
             item.close
           rescue SystemCallError, IOError => ex
-            raise Busboy::DatabagWriteError.new(databagpath), ex
+            raise Bellboy::DatabagWriteError.new(databagpath), ex
           end
         else
-          Busboy.logger.log "Failed to download #{location}"
-          fail Busboy::DatabagAPIError, location
+          Bellboy.logger.log "Failed to download #{location}"
+          fail Bellboy::DatabagAPIError, location
         end
       end
     end
