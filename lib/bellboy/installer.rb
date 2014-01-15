@@ -8,7 +8,7 @@ module Bellboy
   class Installer
     class << self
       def install(berksfile, options = {})
-        @bellboyfile = options[:busboyfile]
+        @bellboyfile = options[:bellboyfile]
 
         local_sources = Bellboy.berks_sources(berksfile)
 

@@ -7,7 +7,7 @@ module Bellboy
   class Uploader
     class << self
       def upload(berksfile, options = {})
-        @bellboyfile = options[:busboyfile]
+        @bellboyfile = options[:bellboyfile]
 
         local_sources = Bellboy.berks_sources(berksfile)
         conn = Bellboy.ridley_connection(options)
