@@ -34,9 +34,18 @@ module Bellboy
           if File.exists?(File.join(source.cached_cookbook.path, @bellboyfile))
             site = berksfile.locations.select { |loc| loc[:type] == :databags }.first
 
-            fail Berkshelf::InvalidChefAPILocation if site.nil?
+            if site.nil?
+              # Try the 'site' location
+              site = berksfile.locations.select { |loc| loc[:type] == :site }.first
 
-            download_databags(source, site)
+              fail Berkshelf::InvalidChefAPILocation if site.nil?
+
+              location = "#{site[:value]}/databags"
+            else
+              location = site[:value]
+            end
+
+            download_databags(source, location)
           end
 
         end
@@ -79,7 +88,7 @@ module Bellboy
       end
 
       def download_item(site, databag, item, itempath)
-        location = File.join("#{site[:value]}", databag, item)
+        location = File.join(site, databag, item)
 
         Bellboy.logger.log "Downloading data bag item #{databag}/#{item} from '#{location}'"
 
