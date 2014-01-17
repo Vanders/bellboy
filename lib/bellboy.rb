@@ -18,6 +18,8 @@
 require 'berkshelf'
 require 'ridley'
 
+require 'bellboy/mixin/berkshelf.rb'
+
 require 'bellboy/errors'
 require 'bellboy/logger'
 require 'bellboy/versioner'
