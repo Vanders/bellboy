@@ -48,18 +48,18 @@ module Bellboy
 
           # Process every sub-directory (but not current & parent, natch)
           unless dir == '.' || dir == '..'
-            begin
-              bag = conn.data_bag.create(name: dir) unless conn.data_bag.find(dir)
-              if bag.nil?
-                Bellboy.logger.verbose "Skipped creation of data bag #{dir}"
-              else
-                Bellboy.logger.verbose "Created new data bag #{dir}"
-              end
-              manifest = upload_databag_items(conn, File.join(path, dir), dir)
 
+            begin
+              conn.data_bag.create(name: dir)
+            rescue Ridley::Errors::HTTPConflict
+              Bellboy.logger.verbose "Skipped creation of data bag #{dir}"
             rescue Ridley::Errors::RidleyError => ex
               raise ChefConnectionError, ex
-            end
+            else
+              Bellboy.logger.verbose "Created new data bag #{dir}"
+            end 
+
+            manifest = upload_databag_items(conn, File.join(path, dir), dir)
 
             create_manifest_file(cookbook.path, dir, manifest)
           end
