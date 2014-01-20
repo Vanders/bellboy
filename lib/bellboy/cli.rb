@@ -25,6 +25,13 @@ module Bellboy
       super(*args)
 
       Bellboy.logger = Bellboy::Logger.new(options)
+
+      if @options[:config]
+        unless File.exist?(@options[:config])
+          raise ConfigNotFound, @options[:config]
+        end
+          Berkshelf::Config.set_path(@options[:config])
+        end
     end
 
     class_option :verbose,

@@ -60,4 +60,15 @@ module Bellboy
       "Databag API call failed for #{@location}"
     end
   end
+
+  # Invalid configuration file path
+  class ConfigNotFound < BellboyError
+    def initialize(configpath)
+      @configpath = configpath
+    end
+
+    def to_s
+      "Config file #{@configpath} does not exist"
+    end
+  end
 end
