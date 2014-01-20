@@ -99,5 +99,28 @@ module Bellboy
       berksfile = Bellboy.berks_from_file(options[:berksfile])
       Bellboy::Uploader.upload(berksfile, options)
     end
+
+    desc 'list', 'List all databags for all Cookbooks known by Berkshelf'
+    method_option :berksfile,
+      type: :string,
+      default: Berkshelf::DEFAULT_FILENAME,
+      desc: 'Path to a Berksfile to operate off of.',
+      aliases: '-b',
+      banner: 'PATH'
+    method_option :bellboyfile,
+      type: :string,
+      default: Bellboy::DEFAULT_FILENAME,
+      desc: 'Path to a Bellboy file to operate off of.',
+      aliases: '-d',
+      banner: 'PATH'
+    method_option :bags,
+      type: :boolean,
+      desc: 'List only the databags.',
+      aliases: '-B',
+      default: false
+    def list
+      berksfile = Bellboy.berks_from_file(options[:berksfile])
+      Bellboy.list(berksfile, options)
+    end 
   end
 end
