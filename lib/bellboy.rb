@@ -68,7 +68,9 @@ module Bellboy
       Ridley.new(ridley_options)
     end
 
-    def list(berksfile, options = {})
+    def list(berksfile)
+      databags = {}
+
       local_sources = Bellboy.berks_sources(berksfile)
 
       local_sources.each do |source|
@@ -77,20 +79,22 @@ module Bellboy
         path = File.join(source.cached_cookbook.path, 'data_bags')
         Dir.foreach(path) do |dir|
           subdir = File.join(path, dir)
+
           next unless File.directory?(subdir)
           next if dir == '.' || dir == '..'
 
-          Bellboy.logger.log dir if options[:bags] 
+          databags[dir] = []
 
           Dir.foreach(subdir) do |item|
             next if item == '.' || item == '..'
 
-            Bellboy.logger.log "#{dir}/#{item}"
-          end unless options[:bags]
-          
+            databags[dir] << item
+          end
         end if Dir.exists?(path)
+
       end
 
+      databags
     end
   end
 end

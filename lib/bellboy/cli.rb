@@ -118,9 +118,27 @@ module Bellboy
       desc: 'List only the databags.',
       aliases: '-B',
       default: false
+    method_option :json,
+      type: :boolean,
+      desc: 'Output in JSON format.',
+      aliases: '-j',
+      default: false
     def list
       berksfile = Bellboy.berks_from_file(options[:berksfile])
-      Bellboy.list(berksfile, options)
-    end 
+      databags = Bellboy.list(berksfile)
+
+      if options[:json]
+        puts databags.to_json
+      else
+        databags.each do |bag, items|
+          puts options[:bags] ? bag : "#{bag}:"
+
+          items.each do |item|
+            puts "\t#{item}"
+          end unless options[:bags]
+        end
+      end
+
+    end
   end
 end
