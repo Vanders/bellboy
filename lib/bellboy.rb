@@ -87,8 +87,9 @@ module Bellboy
 
           Dir.foreach(subdir) do |item|
             next if item == '.' || item == '..'
+            next unless item.match('^.*\.json$')
 
-            databags[dir] << item
+            databags[dir] << item.chomp('.json')
           end
         end if Dir.exists?(path)
 
