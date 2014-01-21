@@ -128,13 +128,13 @@ module Bellboy
       databags = Bellboy.list(berksfile)
 
       if options[:json]
-        puts databags.to_json
+        Bellboy.logger.log databags.to_json
       else
         databags.each do |bag, items|
-          puts options[:bags] ? bag : "#{bag}:"
+          Bellboy.logger.log options[:bags] ? bag : "#{bag}:"
 
           items.each do |item|
-            puts "\t#{item}"
+            Bellboy.logger.log "\t#{item}"
           end unless options[:bags]
         end
       end
