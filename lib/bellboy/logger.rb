@@ -34,7 +34,7 @@ module Bellboy
 
     # Output a debug message
     def debug(message)
-      puts(message) unless @loglevel < Bellboy::LOG_LEVEL_DEBUG
+      $stderr.puts(message) unless @loglevel < Bellboy::LOG_LEVEL_DEBUG
     end
     alias_method :verbose, :debug
 
