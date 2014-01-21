@@ -24,7 +24,7 @@ describe 'logger' do
 
   it 'should log debug messages when \'verbose\' is enabled' do
     logger = Bellboy::Logger.new( {:verbose => true} )
-    content = capture(:stdout) { logger.debug 'test message #4' }
+    content = capture(:stderr) { logger.debug 'test message #4' }
     expect(content).to eq("test message #4\n")
   end
 end
