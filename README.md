@@ -124,3 +124,22 @@ $PWD/config.json
 You can also specify the path to the Berkshelf configuration file with the ```-c``` option:
 
     bellboy install -c /path/to/berkshelf/config.json
+
+### Databags API
+
+Bellboy requires a working API server which it uses to download databag items. Normally Bellboy expects this API to run alongside your existing Berkshelf API, and Bellboy will use the existing `site` directive from the Berksfile to find the API.
+
+For example, if your Berksfile contains
+
+    site "https://example.com"
+
+then Bellboy assumes that the databag API is running at `https://example.com/databags`
+
+It is also possible to run the databag API at a different location. You can specify the URL to the API with the Bellboy specific `databags` directive in your Berksfile. However, Berkshelf will not understand this directive, so using `databags` in your Berksfile is slightly more complicated
+
+    site "https://example.com"
+    databags "https://databags.example.com" if Object.constants.include? :Bellboy
+
+The `if` clause ensures that Berkshelf will ignore the new directive, but that it will be processed if the Berksfile is loaded by Bellboy.
+
+The databag API is a simple Sinatra application. See [the Githib page](https://github.com/dyninc/databagapi) for the source and documentation.
