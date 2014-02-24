@@ -42,9 +42,15 @@ module Bellboy
     attr_accessor :logger
 
     def berks_sources(berksfile)
-      #resolver = Berkshelf.ui.mute { berksfile.resolve(berksfile.sources) }
-      #resolver[:sources]
-      Berkshelf::cookbook_store.cookbooks
+      sources = Array.new
+
+      dependencies = berksfile.list
+      dependencies.each do |dependency|
+        Bellboy.logger.debug "Adding source for #{dependency.name}"
+        sources << berksfile.retrieve_locked(dependency)
+      end
+
+      sources
     end
 
     def ridley_connection(options = {})
