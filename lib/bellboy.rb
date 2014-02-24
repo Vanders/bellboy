@@ -42,8 +42,9 @@ module Bellboy
     attr_accessor :logger
 
     def berks_sources(berksfile)
-      resolver = Berkshelf.ui.mute { berksfile.resolve(berksfile.sources) }
-      resolver[:sources]
+      #resolver = Berkshelf.ui.mute { berksfile.resolve(berksfile.sources) }
+      #resolver[:sources]
+      Berkshelf::cookbook_store.cookbooks
     end
 
     def ridley_connection(options = {})
@@ -74,9 +75,9 @@ module Bellboy
       local_sources = Bellboy.berks_sources(berksfile)
 
       local_sources.each do |source|
-        Bellboy.logger.debug "Source: #{source.cached_cookbook.path}"
+        Bellboy.logger.debug "Source: #{source.path}"
 
-        path = File.join(source.cached_cookbook.path, 'data_bags')
+        path = File.join(source.path, 'data_bags')
         Dir.foreach(path) do |dir|
           subdir = File.join(path, dir)
 
