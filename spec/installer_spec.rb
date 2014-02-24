@@ -16,7 +16,7 @@ describe 'installer' do
     end
 
     it 'should not throw any exceptions' do
-      Bellboy::Installer.install(@berksfile)
+      Bellboy::Installer.install(@berksfile, {:bellboyfile => '/dev/null'})
     end
 
   end
