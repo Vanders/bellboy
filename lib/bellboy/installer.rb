@@ -35,18 +35,20 @@ module Bellboy
           Bellboy.logger.debug "Source: #{source.path}"
 
           if File.exists?(File.join(source.path, @bellboyfile))
-            site = berksfile.locations.select { |loc| loc[:type] == :databags }.first
+            site = berksfile.databags_source
 
             if site.nil?
-              # Try the 'site' location
-              site = berksfile.locations.select { |loc| loc[:type] == :site }.first
+              # Try the first source
+              site = berksfile.sources.first
 
               fail Berkshelf::InvalidChefAPILocation if site.nil?
 
-              location = "#{site[:value]}/databags"
+              location = "#{site.uri}/databags"
             else
-              location = site[:value]
+              location = site.uri
             end
+
+            Bellboy.logger.debug "Using #{site} for databags API location"
 
             download_databags(source, location)
           end
