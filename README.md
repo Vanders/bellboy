@@ -142,4 +142,4 @@ It is also possible to run the databag API at a different location. You can spec
 
 The `if` clause ensures that Berkshelf will ignore the new directive, but that it will be processed if the Berksfile is loaded by Bellboy.
 
-The databag API is a simple Sinatra application. See [the Githib page](https://github.com/dyninc/databagapi) for the source and documentation.
+The databag API is a simple Sinatra application. See [the Githib page](https://github.com/Vanders/databagsapi) for the source and documentation.
