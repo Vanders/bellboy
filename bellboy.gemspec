@@ -7,7 +7,7 @@ Gem::Specification.new do |g|
   g.description             = "Version, install & upload data bag items that are stored alongside your Berkshelf Cookbooks"
   g.authors                 = ["Kristian Van Der Vliet"]
   g.email                   = 'kvandervliet@dyn.com'
-  g.homepage                = ''
+  g.homepage                = 'https://github.com/Vanders/bellboy'
   g.license                 = 'Apache-2.0'
 
   g.files                   = `git ls-files`.split($\)
