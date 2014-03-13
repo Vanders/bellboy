@@ -26,24 +26,29 @@ module Bellboy
       def install(berksfile, options = {})
         @bellboyfile = options[:bellboyfile]
 
+        # Make sure no one (E.g. rspec) did anything silly
+        abort if @bellboyfile.nil?
+
         local_sources = Bellboy.berks_sources(berksfile)
 
         local_sources.each do |source|
-          Bellboy.logger.debug "Source: #{source.cached_cookbook.path}"
+          Bellboy.logger.debug "Source: #{source.path}"
 
-          if File.exists?(File.join(source.cached_cookbook.path, @bellboyfile))
-            site = berksfile.locations.select { |loc| loc[:type] == :databags }.first
+          if File.exists?(File.join(source.path, @bellboyfile))
+            site = berksfile.databags_source
 
             if site.nil?
-              # Try the 'site' location
-              site = berksfile.locations.select { |loc| loc[:type] == :site }.first
+              # Try the first source
+              site = berksfile.sources.first
 
               fail Berkshelf::InvalidChefAPILocation if site.nil?
 
-              location = "#{site[:value]}/databags"
+              location = "#{site.uri}/databags"
             else
-              location = site[:value]
+              location = site.uri
             end
+
+            Bellboy.logger.debug "Using #{site} for databags API location"
 
             download_databags(source, location)
           end
@@ -54,9 +59,9 @@ module Bellboy
       private
 
       def download_databags(source, site)
-        Bellboy.logger.log "Downloading databags for #{source.cached_cookbook.name}"
+        Bellboy.logger.log "Downloading databags for #{source.name}"
 
-        path = source.cached_cookbook.path
+        path = source.path
         containerpath = File.join(path, 'data_bags')
 
         begin

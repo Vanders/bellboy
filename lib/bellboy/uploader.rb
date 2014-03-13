@@ -29,9 +29,9 @@ module Bellboy
         conn = Bellboy.ridley_connection(options)
  
         local_sources.each do |source|
-          Bellboy.logger.debug "Source: #{source.cached_cookbook.path}"
+          Bellboy.logger.debug "Source: #{source.path}"
 
-          upload_databags(source.cached_cookbook, conn)
+          upload_databags(source, conn)
         end
       end
 

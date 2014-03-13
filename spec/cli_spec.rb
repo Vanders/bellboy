@@ -5,6 +5,8 @@ require 'bellboy'
 require_relative 'spec-helpers'
 
 describe 'cli' do
+  include UsesTempFiles
+
   it 'should output help information if run with no arguments' do
     content = capture(:stdout) { Bellboy::Cli.start(%w[]) }
     expect(content).to match(/Commands:/)
@@ -30,20 +32,30 @@ describe 'cli' do
     expect(content).to match(/Upload all databags for all Cookbooks known by Berkshelf/)
   end
 
-  it 'should not fail to run the \'version\' command with an empty Berksfile' do
-    Bellboy::Cli.start(%w[version -b /dev/null])
-  end
-
-  it 'should not fail to run the \'install\' command with an empty Berksfile' do
-    Bellboy::Cli.start(%w[install -b /dev/null])
-  end
-
-  it 'should not fail to run the \'upload\' command with an empty Berksfile' do
-    Bellboy::Cli.start(%w[upload -b /dev/null])
-  end
-
   it 'should fail to run with an invalid Berksfile' do
     content = capture(:stdout) { lambda{ Bellboy::Cli.start(%w[version -b /i/dont/exist]) }.should exit_with_code(0) }
     expect(content).to match(/could not be found/)
+  end
+
+  context "with non-empty Berksfile" do
+
+    in_directory_with_file('Berksfile')
+
+    before (:each) do
+      content_for_file("source 'http://example.com'")
+    end
+
+    it 'should not fail to run the \'version\' command' do
+      Bellboy::Cli.start(%w[version -b Berksfile])
+    end
+
+    it 'should not fail to run the \'install\' command' do
+      Bellboy::Cli.start(%w[install -b Berksfile])
+    end
+
+    it 'should not fail to run the \'upload\' command' do
+      Bellboy::Cli.start(%w[upload -b Berksfile])
+    end
+
   end
 end

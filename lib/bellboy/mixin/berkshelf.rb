@@ -4,6 +4,7 @@ module Bellboy
     def self.included(base)
       base.class_eval do
         expose_method :databags
+        expose_method :databags_source
       end
     end
 
@@ -14,9 +15,16 @@ module Bellboy
     #
     # @param [String] value
     #
-    # @return [Hash]
-    def databags(value)
-      add_location(:databags, value)
+    # @return [Berkshelf::Source]
+    def databags(api_url)
+      @databags = Berkshelf::Source.new(api_url)
+    end
+
+    # Get the 'Databags' location which will be used to resolve databag sources.
+    #
+    # @return [Berkshelf::Source]
+    def databags_source
+      @databags
     end
 
   end
